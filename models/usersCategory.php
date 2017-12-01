@@ -31,19 +31,32 @@
 
 namespace Components\Forum\Models;
 
-use Components\Tags\Models\Cloud;
+use Hubzero\Database\Relational;
+use Date;
+use User;
 
-require_once \Component::path('com_tags') . DS . 'models' . DS . 'cloud.php';
-
-/**
- * Forum Tagging class
- */
-class Tags extends Cloud
+class UsersCategory extends Relational
 {
-	/**
-	 * Object type, used for linking objects (such as resources) to tags
-	 *
-	 * @var string
-	 */
-	protected $_scope = 'forum';
+
+	protected $table = 'jos_forum_users_categories';
+
+	protected $rules = array(
+		'category_id' => 'notempty',
+		'user_id'      => 'notempty'
+	);
+
+	public $initiate = array(
+		'created'
+	);
+
+	public function category()
+	{
+		return $this->belongsToOne('Components\Forum\Models\Category', 'category_id');
+	}
+
+	public function user()
+	{
+		return $this->belongsToOne('Hubzero\User\User', 'user_id');
+	}
+
 }
